@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Overlays Within Street View</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnSJqsDQ_MIkshBqYdOjECtGCcdHKdX8o&callback=initMap&libraries=&v=weekly"
+      defer
+    ></script>
+    <style type="text/css">
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+
+      /* Optional: Makes the sample page fill the window. */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #floating-panel {
+        position: absolute;
+        top: 10px;
+        left: 25%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: "Roboto", "sans-serif";
+        line-height: 30px;
+        padding-left: 10px;
+      }
+
+      #floating-panel {
+        margin-left: -100px;
+      }
+    </style>
+
+  </head>
+  <body>
+    <div id="floating-panel">
+      <input
+        type="button"
+        value="Toggle Street View"
+        onclick="toggleStreetView();"
+      />
+    </div>
+    <div id="map"></div>
+    <script>
+      let panorama;
+
+      function initMap() {
+        const astorPlace = { lat: 40.729884, lng: -73.990988 };
+        // Set up the map
+        const map = new google.maps.Map(document.getElementById("map"), {
+          center: astorPlace,
+          zoom: 18,
+          streetViewControl: false,
+        });
+        // Set up the markers on the map
+        const cafeMarker = new google.maps.Marker({
+          position: { lat: 40.730031, lng: -73.991428 },
+          map,
+          icon:
+            "https://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=cafe|FFFF00",
+          title: "Cafe",
+        });
+        const bankMarker = new google.maps.Marker({
+          position: { lat: 40.729681, lng: -73.991138 },
+          map,
+          icon:
+            "https://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=dollar|FFFF00",
+          title: "Bank",
+        });
+        const busMarker = new google.maps.Marker({
+          position: { lat: 40.729559, lng: -73.990741 },
+          map,
+          icon:
+            "https://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=bus|FFFF00",
+          title: "Bus Stop",
+        });
+        // We get the map's default panorama and set up some defaults.
+        // Note that we don't yet set it visible.
+        panorama = map.getStreetView();
+        panorama.setPosition(astorPlace);
+        panorama.setPov(
+          /** @type {google.maps.StreetViewPov} */ {
+            heading: 265,
+            pitch: 0,
+          }
+        );
+      }
+
+      function toggleStreetView() {
+        const toggle = panorama.getVisible();
+
+        if (toggle == false) {
+          panorama.setVisible(true);
+        } else {
+          panorama.setVisible(false);
+        }
+      }
+    </script>
+  </body>
+</html>
+////////
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IGoBot</title>
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css' rel='stylesheet' />
+</head>
+
+<body>
+ <h1>Welcome to IGoBot</h1>
+    <h3>YOur personal travel guide !! </h3>
+<style type="text/css">
+#info {
+display: block;
+position: relative;
+margin: 0px auto;
+width: 50%;
+padding: 10px;
+border: none;
+border-radius: 3px;
+font-size: 12px;
+text-align: center;
+color: #222;
+background: #fff;
+}
+</style>
+<div id='map' width="100%" style='height:400px'></div>
+<pre id="info"></pre>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoibXlzdGljLWVhZ2xlIiwiYSI6ImNrazlwdjV2aTBmYW4yd3BiNmQzejUzYzMifQ.Nx7Bsb6wqTWSQeDHEqt83w';
+var map = new mapboxgl.Map({
+container: 'map', // container id
+style: 'mapbox://styles/mapbox/streets-v11',
+center: [-74.5, 40], // starting position
+zoom: 9 // starting zoom
+});
+
+map.on('mousemove', function (e) {
+document.getElementById('info').innerHTML =
+// e.point is the x, y coordinates of the mousemove event relative
+// to the top-left corner of the map
+JSON.stringify(e.point) +
+'<br />' +
+// e.lngLat is the longitude, latitude geographical position of the event
+JSON.stringify(e.lngLat.wrap());
+});
+</script>
+</body>
+</html>
